@@ -21,6 +21,16 @@ export const createPost = async (title, content) => {
   }
 };
 
+export const updatePost = async (postId, updates) => {
+  try {
+    const response = await api.patch(`/posts/${postId}`, updates);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating post:', error);
+    throw error;
+  }
+};
+
 export const submitPost = async (postId) => {
   try {
     const response = await api.post(`/posts/${postId}/submit/`);

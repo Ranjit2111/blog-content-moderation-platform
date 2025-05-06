@@ -9,6 +9,10 @@ class PostBase(BaseModel):
 class PostCreate(PostBase):
     pass
 
+class PostUpdate(BaseModel):
+    title: Optional[str] = None
+    content: Optional[str] = None
+
 class PostResponse(PostBase):
     id: int
     status: str

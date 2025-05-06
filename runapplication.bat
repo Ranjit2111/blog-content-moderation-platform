@@ -1,7 +1,8 @@
 @echo off
 echo Starting backend...
+call env\Scripts\activate
 cd backend
-start "backend" cmd /k "call ..\env\Scripts\activate && uvicorn main:app --reload"
+start "backend" cmd /k "uvicorn main:app --reload"
 echo Backend starting at http://localhost:8000
 
 echo Waiting for backend to initialize...
