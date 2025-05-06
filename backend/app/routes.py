@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Depends, status, Query
+from fastapi import FastAPI, HTTPException, Depends, status, Query, APIRouter
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy import update, insert
@@ -10,7 +10,7 @@ from app.models import Post
 from app.moderation import moderate_content
 from app.database import get_db
 
-router = FastAPI()
+router = APIRouter()
 
 @router.post("/posts/", response_model=PostResponse, status_code=status.HTTP_201_CREATED)
 async def create_post(post: PostCreate, db: AsyncSession = Depends(get_db)):
