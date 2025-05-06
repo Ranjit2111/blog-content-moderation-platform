@@ -89,7 +89,7 @@ app/
 
 ### Prerequisites
 
-- Python 3.11 or higher
+- Python 3.10
 - Node.js 20.x or higher
 - npm 10.x or higher
 - Git
