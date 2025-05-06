@@ -1,37 +1,143 @@
-# Content Moderation & Publishing Platform
+# AI-Assisted Content Moderation & Publishing Platform
 
-A platform where users can create and publish short blog posts with AI-assisted content moderation.
+A platform where users can create and publish short blog posts with AI-assisted content moderation to ensure content meets quality standards and community guidelines.
+
+## About the Project
+
+This application combines FastAPI, SQLite, React, and Google's Gemini AI to create a content moderation and publishing platform. Users can write blog posts that are automatically reviewed by an AI moderation service before publishing. The system flags inappropriate content based on keywords, length, or tone.
+
+The moderation workflow is:
+1. User creates a draft post
+2. User submits the post for review
+3. AI moderates the content, checking:
+   - Content length (50-2000 characters)
+   - Banned words from a curated list
+   - Aggressive tone detection using Gemini AI
+4. If approved, the post can be published
+5. If flagged, user receives feedback on why the post was rejected
 
 ## Features
 
-- Create and edit draft blog posts
-- Automatic content moderation with Gemini AI for tone detection
-- Publish approved posts
-- View posts by status
+- **Post Management**:
+  - Create draft blog posts
+  - Edit draft posts before submission
+  - View all posts with status filtering
+  - Read published posts in a clean, focused interface
 
-## Setup
+- **AI-Powered Moderation**:
+  - Advanced tone detection with Gemini AI for nuanced content analysis
+  - Basic rule-based checks for content length and banned words
+  - Detailed feedback on why content was flagged
+  - Automatic fallback to basic rules if AI service is unavailable
 
-1. **Copy the environment file**
+- **Status Workflow**:
+  - Draft → Review → Approved/Flagged → Published
+  - Clear visual indicators of post status
+  - Read-only enforcement for published content
+
+- **Developer Tools**:
+  - Python SDK for programmatic interaction (via OpenAPI)
+  - Complete API documentation
+  - Comprehensive test suite
+
+## Technology Stack
+
+- **Backend**: FastAPI, SQLAlchemy, SQLite, Alembic
+- **Frontend**: React, React Router, Axios
+- **AI**: Google Generative AI (Gemini)
+- **Testing**: Pytest, Httpx
+
+## Project Structure
 
 ```
-copy backend\.env.example backend\.env
+app/
+├── backend/
+│   ├── app/
+│   │   ├── __init__.py
+│   │   ├── database.py     # Database connection & session management
+│   │   ├── models.py       # SQLAlchemy models
+│   │   ├── moderation.py   # Content moderation logic w/ Gemini AI
+│   │   ├── routes.py       # API endpoints
+│   │   ├── schemas.py      # Pydantic data validation models
+│   │   └── tests.py        # Unit tests
+│   ├── migrations/         # Alembic database migrations
+│   ├── banned_words.txt    # List of prohibited words
+│   ├── .env.example        # Environment variables template
+│   ├── alembic.ini         # Alembic configuration
+│   └── main.py             # FastAPI application entry point
+├── frontend/
+│   ├── public/             # Static assets
+│   ├── src/
+│   │   ├── components/     # React components
+│   │   │   ├── PostDetail.jsx  # View/edit individual posts
+│   │   │   ├── PostForm.jsx    # Create new posts
+│   │   │   └── PostList.jsx    # List all posts with filters
+│   │   ├── App.css         # Application styles
+│   │   ├── App.jsx         # Main React component
+│   │   ├── api.js          # API client for backend
+│   │   ├── index.css       # Base styles
+│   │   └── main.jsx        # React entry point
+│   ├── index.html          # HTML template
+│   ├── package.json        # npm dependencies and scripts
+│   └── vite.config.js      # Vite configuration
+├── requirements.txt        # Python dependencies
+├── setupdev.bat            # Setup script for Windows
+└── runapplication.bat      # Application startup script for Windows
 ```
 
-2. **Add your Gemini API key** to the `.env` file:
+## Setup Guide
 
+### Prerequisites
+
+- Python 3.11 or higher
+- Node.js 20.x or higher
+- npm 10.x or higher
+- Git
+
+### Step 1: Clone the Repository
+
+```bash
+git clone <repository-url>
+cd <repository-folder>
 ```
-GEMINI_API_KEY=your_actual_api_key
-```
 
-You can get a Gemini API key from the [Google AI Studio](https://ai.google.dev/).
+### Step 2: Set Up Gemini API Key
 
-3. **Run the setup script** to install all dependencies:
+1. Go to [Google AI Studio](https://ai.google.dev/)
+2. Sign in with your Google account
+3. Navigate to "Get API key" or "API keys" section
+4. Create a new API key or use an existing one
+5. Copy the API key for the next step
+
+### Step 3: Configure Environment Variables
+
+1. Navigate to the backend directory
+2. Copy the example environment file:
+   ```
+   copy backend\.env.example backend\.env
+   ```
+3. Open the `.env` file in a text editor
+4. Replace `your_gemini_api_key_here` with your actual Gemini API key:
+   ```
+   GEMINI_API_KEY=your_actual_api_key_here
+   ```
+5. Save and close the file
+
+### Step 4: Run the Setup Script
+
+Run the setup script to install all dependencies and initialize the database:
 
 ```
 setupdev.bat
 ```
 
-## Running the Application
+This script will:
+- Create a Python virtual environment
+- Install backend dependencies
+- Initialize the database with Alembic
+- Install frontend dependencies
+
+### Step 5: Run the Application
 
 Start both the backend and frontend servers:
 
@@ -39,8 +145,35 @@ Start both the backend and frontend servers:
 runapplication.bat
 ```
 
-- Backend API will be available at: http://localhost:8000
-- Frontend will be available at: http://localhost:5173
+- The backend API will be available at: http://localhost:8000
+- The frontend will be available at: http://localhost:5173
+- API documentation will be available at: http://localhost:8000/docs
+
+## Using the Application
+
+1. **Create a Post**:
+   - Click on "Create New" in the navigation menu
+   - Fill in the title and content (minimum 50 characters)
+   - Click "Create Draft" to save your post
+
+2. **Edit a Draft**:
+   - Navigate to your draft post
+   - Click "Edit Draft" to make changes
+   - Click "Save Changes" when done
+
+3. **Submit for Review**:
+   - Open a draft post
+   - Click "Submit for Review"
+   - The AI moderation system will analyze your content
+
+4. **Review Results**:
+   - If approved, you will see a green "Approved" message
+   - If flagged, you will see reasons why your post failed review
+   - For flagged posts, edit the content and resubmit
+
+5. **Publish a Post**:
+   - Once a post is approved, click "Publish Post"
+   - Published posts cannot be edited and are visible to all users
 
 ## API Endpoints
 
@@ -51,15 +184,9 @@ runapplication.bat
 - `PATCH /posts/{post_id}/publish/` - Publish an approved post
 - `GET /posts/{post_id}` - View a specific post
 
-## AI Moderation
-
-The platform uses Gemini AI to detect aggressive tone in content, providing:
-
-- More nuanced tone detection than simple rule-based checks
-- Detailed explanations of why content is flagged
-- Fallback to basic rules if the API key is not configured
-
 ## SDK Usage
+
+The platform generates a Python SDK for programmatic interactions:
 
 ```python
 from moderation_sdk import ApiClient
@@ -71,3 +198,10 @@ review = api.submit_post_for_review(post_id=draft.id)
 if review.status == "approved":
     api.publish_post(post_id=draft.id)
 ```
+
+## Troubleshooting
+
+- **Gemini API Issues**: If you encounter errors with the Gemini API, verify your API key is correct and that you have access to the Gemini models.
+- **Database Errors**: If you experience database issues, try deleting the `content.db` file and rerunning `setupdev.bat`.
+- **Frontend Connection Errors**: Ensure the backend server is running on port 8000. Check for any CORS issues in the browser console.
+- **Setup Script Fails**: Make sure you have the correct Python and Node.js versions installed.

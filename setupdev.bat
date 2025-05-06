@@ -2,7 +2,7 @@
 echo Setting up backend...
 python -m venv env
 call env\Scripts\activate
-
+echo Activated Virtual Environment 
 echo Installing backend dependencies...
 IF EXIST requirements.txt (
     pip install -r requirements.txt
