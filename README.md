@@ -97,8 +97,8 @@ app/
 ### Step 1: Clone the Repository
 
 ```bash
-git clone <repository-url>
-cd <repository-folder>
+git clone https://github.com/Ranjit2111/Aumne-Coding-Task.git
+cd Aumne-Coding-Task
 ```
 
 ### Step 2: Set Up Gemini API Key
