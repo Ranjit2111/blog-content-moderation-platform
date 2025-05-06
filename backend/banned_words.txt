@@ -1,0 +1,12 @@
+profanity
+obscene
+offensive
+stupid
+idiot
+damn
+crap
+hell
+bullshit
+shit
+fuck
+asshole 
