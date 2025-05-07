@@ -186,18 +186,38 @@ runapplication.bat
 
 ## SDK Usage
 
-The platform generates a Python SDK for programmatic interactions:
+Script Overview
+The script I've created demonstrates a complete workflow for content moderation and publishing using the API documented in your SDK. Here's what it does:
 
-```python
-from moderation_sdk import ApiClient
-from moderation_sdk.api.posts_api import PostsApi
+1. **Creates a draft post:** Sets up initial content that needs moderation
+2. **Submits the post for review:** Triggers the content moderation process
+3. **Checks the post status:** Verifies whether it was approved or flagged
+4. **Updates the post if flagged:** Demonstrates how to revise content that didn't pass moderation
+5. **Publishes the post if approved:** Shows the final step in the workflow
+6. **Lists posts with different filters:** Demonstrates how to view all posts or filter by status
 
-api = PostsApi(ApiClient())
-draft = api.create_post({"title": "Test", "content": "Valid content"})
-review = api.submit_post_for_review(post_id=draft.id)
-if review.status == "approved":
-    api.publish_post(post_id=draft.id)
-```
+## Key Components
+### Configuration
+The script starts by configuring the API client with your server URL (defaults to localhost:8000).
+
+### Error Handling
+Comprehensive try/except blocks around each API call ensure robust error handling.
+
+### Workflow Logic
+The script includes conditional logic to handle different moderation outcomes:
+
+- If a post is flagged, it updates the content and resubmits
+- If a post is approved, it proceeds to publishing
+- If still pending approval, it simply reports the current status
+
+### Status Checking
+After each operation, the script checks and displays the current status of the post.
+
+## Usage Instructions
+
+- Make sure your moderation API server is running (on port 8000 by default, or modify the host URL)
+- Install the SDK dependencies: pip install -e ./moderation_sdk
+- Run the script: python content_moderation_demo.py
 
 ## Troubleshooting
 
