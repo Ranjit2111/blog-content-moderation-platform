@@ -71,3 +71,13 @@ export const listPosts = async (statusFilter = null) => {
     throw error;
   }
 }; 
+
+export const deletePost = async (postId) => {
+  try {
+    const response = await api.delete(`/posts/${postId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting post:', error);
+    throw error;
+  }
+};

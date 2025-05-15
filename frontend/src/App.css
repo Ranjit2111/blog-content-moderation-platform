@@ -251,3 +251,21 @@ button:disabled {
   text-align: center;
   color: #666;
 } 
+
+.delete-button {
+  background-color: var(--error-color);
+  color: white;
+}
+
+.delete-confirmation {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background-color: #fee;
+  border: 1px solid var(--error-color);
+  border-radius: 8px;
+}
+
+.delete-confirmation p {
+  margin-bottom: 1rem;
+  font-weight: 500;
+}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { getPost, submitPost, publishPost, updatePost } from '../api';
+import { getPost, submitPost, publishPost, updatePost, deletePost } from '../api';
 
 const PostDetail = () => {
   const { id } = useParams();
@@ -11,10 +11,12 @@ const PostDetail = () => {
   const [moderationResult, setModerationResult] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState('');
   const [editedContent, setEditedContent] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   
   useEffect(() => {
     fetchPost();
@@ -71,6 +73,24 @@ const PostDetail = () => {
     } finally {
       setIsPublishing(false);
     }
+  };
+
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    try {
+      await deletePost(id);
+      navigate('/'); // Redirect to posts list after deletion
+    } catch (err) {
+      setError('Failed to delete post. Please try again.');
+      console.error(err);
+    } finally {
+      setIsDeleting(false);
+      setShowDeleteConfirm(false);
+    }
+  };
+
+  const toggleDeleteConfirm = () => {
+    setShowDeleteConfirm(!showDeleteConfirm);
   };
 
   const toggleEdit = () => {
@@ -186,41 +206,69 @@ const PostDetail = () => {
             </div>
           )}
           
-          <div className="actions">
-            {isDraft && (
-              <>
+          {showDeleteConfirm ? (
+            <div className="delete-confirmation">
+              <p>Are you sure you want to delete this post? This action cannot be undone.</p>
+              <div className="actions">
                 <button 
-                  onClick={handleSubmitForReview} 
-                  disabled={isSubmitting}
-                  className="primary-button"
+                  onClick={handleDelete} 
+                  disabled={isDeleting}
+                  className="delete-button"
                 >
-                  {isSubmitting ? 'Submitting...' : 'Submit for Review'}
+                  {isDeleting ? 'Deleting...' : 'Confirm Delete'}
                 </button>
                 <button 
-                  onClick={toggleEdit} 
+                  onClick={toggleDeleteConfirm} 
                   className="secondary-button"
                 >
-                  Edit Draft
+                  Cancel
                 </button>
-              </>
-            )}
-            
-            {post.status === 'approved' && (
-              <button 
-                onClick={handlePublish} 
-                disabled={isPublishing}
-                className="primary-button"
+              </div>
+            </div>
+          ) : (
+            <div className="actions">
+              {isDraft && (
+                <>
+                  <button 
+                    onClick={handleSubmitForReview} 
+                    disabled={isSubmitting}
+                    className="primary-button"
+                  >
+                    {isSubmitting ? 'Submitting...' : 'Submit for Review'}
+                  </button>
+                  <button 
+                    onClick={toggleEdit} 
+                    className="secondary-button"
+                  >
+                    Edit Draft
+                  </button>
+                </>
+              )}
+              
+              {post.status === 'approved' && (
+                <button 
+                  onClick={handlePublish} 
+                  disabled={isPublishing}
+                  className="primary-button"
+                >
+                  {isPublishing ? 'Publishing...' : 'Publish Post'}
+                </button>
+              )}
+              
+              <button
+                onClick={toggleDeleteConfirm}
+                className="delete-button"
               >
-                {isPublishing ? 'Publishing...' : 'Publish Post'}
+                Delete Post
               </button>
-            )}
-            
-            <Link to="/" className="button">Back to List</Link>
-          </div>
+              
+              <Link to="/" className="button">Back to List</Link>
+            </div>
+          )}
         </>
       )}
     </div>
   );
 };
 
-export default PostDetail; 
+export default PostDetail;
